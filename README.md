@@ -31,6 +31,9 @@ An automation project for provisioning the given infrastructure for AWS.
  Setup access keys in ~/.ssh creadentials file
  
  ```bash
+
   terraform plan
+
   terraform apply
+
 ```
