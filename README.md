@@ -14,14 +14,23 @@ An automation project for provisioning the given infrastructure for AWS.
  ## Files
  
  provider.tf   -  specifies regions and availlability zones
+ 
  main.tf    -     specifies vpc, subnets and route tables
+ 
  instances.tf    -   al work related to auto-scaing and instances 
+ 
  security-groups.tf     -   all security groups and present here
+ 
  db.tf    -    creation of database and db subnet group
+ 
  elb.tf    -   resources related to elastic load balancer
+ 
  nat-gateway   -   resources related to nat gateway
+ 
  sns.tf     -   all work related to notifications
+ 
  variables.tf   -   all user variables
+ 
  outputs.tf     -   looging resource outptus
  
  
