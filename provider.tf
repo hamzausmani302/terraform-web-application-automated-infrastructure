@@ -9,9 +9,9 @@ terraform {
 }
 
 provider "aws" {
-  region                  = "us-east-2"
-  shared_credentials_file = "C:\\Users\\Asus\\.aws\\credentials"
-  profile                 = "hamza"
+  region                  = var.aws_region
+  shared_credentials_file = var.credentials_file_path
+  profile                 = var.aws_user
 }
 
 

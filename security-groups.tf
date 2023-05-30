@@ -29,6 +29,36 @@ resource "aws_security_group" "security_g_ssh" {
   }  
 }
 
+resource "aws_security_group" "bastion_security_group" {
+  vpc_id      = aws_vpc.main.id
+  name        = "Bastion-group"
+  description = "allow rdp access"
+  ingress{
+    description= "RDP ACCESS"
+    from_port=3389
+    to_port=3389
+    protocol="tcp"
+    cidr_blocks= ["0.0.0.0/0" ]     ## resstrict resources
+  }
+  
+  
+  egress{
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    # ipv6_cidr_blocks = ["::/0"]
+    # cidr_blocks= [aws_subnet.pubSubnet1.cidr_block , aws_subnet.pubSubnet2.cidr_block , aws_subnet.priSubnet3.cidr_block ]
+    # ipv6_cidr_blocks = [aws_subnet.pubSubnet1.ipv6_cidr_block , aws_subnet.pubSubnet2.ipv6_cidr_block , aws_subnet.priSubnet3.ipv6_cidr_block ]
+    
+  }  
+}
+
+
+
+
+
+
 
 resource "aws_security_group" "IIS_group" {
   vpc_id      = aws_vpc.main.id
@@ -47,8 +77,8 @@ resource "aws_security_group" "IIS_group" {
     from_port=80
     to_port=80
     protocol="tcp"
-    cidr_blocks= ["0.0.0.0/0" ]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks= [aws_subnet.pubSubnet1.cidr_block , aws_subnet.pubSubnet2.cidr_block , aws_subnet.priSubnet3.cidr_block ]
+    # ipv6_cidr_blocks = [aws_subnet.pubSubnet1.ipv6_cidr_block , aws_subnet.pubSubnet2.ipv6_cidr_block  , aws_subnet.priSubnet3.ipv6_cidr_block]
     
   }
   
@@ -57,8 +87,11 @@ resource "aws_security_group" "IIS_group" {
     from_port=443
     to_port=443
     protocol="tcp"
-    cidr_blocks= ["0.0.0.0/0" ]
-    ipv6_cidr_blocks = ["::/0"]
+    # cidr_blocks= ["0.0.0.0/0" ]
+    # ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks= [aws_subnet.pubSubnet1.cidr_block , aws_subnet.pubSubnet2.cidr_block , aws_subnet.priSubnet3.cidr_block ]
+    # ipv6_cidr_blocks = [aws_subnet.pubSubnet1.ipv6_cidr_block , aws_subnet.pubSubnet2.ipv6_cidr_block  , aws_subnet.priSubnet3.ipv6_cidr_block]
+    
   }
   
   
@@ -68,7 +101,10 @@ resource "aws_security_group" "IIS_group" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    # ipv6_cidr_blocks = ["::/0"]
+    # cidr_blocks= [aws_subnet.pubSubnet1.cidr_block , aws_subnet.pubSubnet2.cidr_block , aws_subnet.priSubnet3.cidr_block ]
+    # ipv6_cidr_blocks = [aws_subnet.pubSubnet1.ipv6_cidr_block , aws_subnet.pubSubnet2.ipv6_cidr_block , aws_subnet.priSubnet3.ipv6_cidr_block ]
+    
   }  
 }
 
@@ -105,12 +141,12 @@ resource "aws_security_group" "rds_sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    cidr_blocks = [aws_subnet.pubSubnet1.cidr_block , aws_subnet.priSubnet1.cidr_block , aws_subnet.priSubnet2.cidr_block  ]
+    cidr_blocks = [ aws_subnet.priSubnet1.cidr_block , aws_subnet.priSubnet2.cidr_block  ]
   }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_subnet.priSubnet1.cidr_block , aws_subnet.priSubnet2.cidr_block]
   }
 }

@@ -3,6 +3,7 @@ resource "aws_vpc" "main" { //this is the vpc
   tags = {
     Name = "dev-vpc"
   }
+  enable_dns_hostnames= true
 }
 
 resource "aws_subnet" "pubSubnet1" {
@@ -64,6 +65,18 @@ resource "aws_subnet" "priSubnet3" {
 
   tags = {
     Name = "subnet-3-private"
+  }
+}
+
+resource "aws_subnet" "priSubnet4" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "172.0.6.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[1]
+  map_public_ip_on_launch = true
+  
+
+  tags = {
+    Name = "subnet-4-private"
   }
 }
 
@@ -138,6 +151,12 @@ resource "aws_route_table_association" "d" {
 
 resource "aws_route_table_association" "e" {
   subnet_id      = aws_subnet.priSubnet3.id
+  route_table_id = aws_route_table.rtprivate.id
+}
+
+
+resource "aws_route_table_association" "f" {
+  subnet_id      = aws_subnet.priSubnet4.id
   route_table_id = aws_route_table.rtprivate.id
 }
 

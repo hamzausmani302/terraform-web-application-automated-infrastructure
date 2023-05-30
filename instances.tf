@@ -1,10 +1,11 @@
 resource "aws_instance" "ec2_machine" {
-  ami           = "ami-08333bccc35d71140" # us-west-2
+  # ami           = "ami-08333bccc35d71140" # us-west-2
+  ami = "ami-008dc7c58d3db0798"
   instance_type = "t2.micro"
   subnet_id= aws_subnet.pubSubnet1.id
   
 
-  vpc_security_group_ids = [aws_security_group.security_g_ssh.id]
+  vpc_security_group_ids = [ aws_security_group.bastion_security_group] //aws_security_group.security_g_ssh.id 
   key_name = aws_key_pair.deployer.key_name
   associate_public_ip_address = true
   
@@ -19,12 +20,14 @@ resource "aws_instance" "ec2_machine" {
 
 resource "aws_launch_template" "iisMachineTemplate" {
   name_prefix   = "IIS"
-  image_id      = "ami-07c433cc0a3274562"
+  image_id      = var.web_server_ami
   instance_type = "t2.micro"
   key_name = "web-server"
   vpc_security_group_ids = [aws_security_group.IIS_group.id]
 
-
+  tags = {
+    Name = "IIS-Machine-Template"
+  }
 }
 
 resource "aws_autoscaling_group" "scaling_group" {
